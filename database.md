@@ -1,0 +1,32 @@
+## Script de Criação do Banco de Dados
+
+```sql
+CREATE DATABASE IF NOT EXISTS filmeseriedesenho;
+USE filmeseriedesenho;
+
+CREATE TABLE IF NOT EXISTS usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    nome VARCHAR(255) NOT NULL,
+    senha VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS generos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS categorias (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS obras (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    descricao TEXT NOT NULL,
+    generoId INT,
+    categoriaId INT,
+    FOREIGN KEY (generoId) REFERENCES generos(id) ON DELETE SET NULL ON UPDATE CASCADE,
+    FOREIGN KEY (categoriaId) REFERENCES categorias(id) ON DELETE SET NULL ON UPDATE CASCADE
+);

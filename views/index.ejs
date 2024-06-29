@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Media App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1,
+    h2 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    form {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    table,
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const apiUrl = 'http://localhost:3000/api';
+      const fetchOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      };
+
+
+      fetch(`${apiUrl}/categorias`)
+        .then(response => response.json())
+        .then(categorias => {
+          const categoriaSelect = document.getElementById('categoria');
+          const categoriaTable = document.getElementById('categorias-table-body');
+          categorias.forEach(categoria => {
+
+            const option = document.createElement('option');
+            option.value = categoria.id;
+            option.textContent = categoria.nome;
+            categoriaSelect.appendChild(option);
+
+
+            const row = document.createElement('tr');
+            const idCell = document.createElement('td');
+            const nomeCell = document.createElement('td');
+            idCell.textContent = categoria.id;
+            nomeCell.textContent = categoria.nome;
+            row.appendChild(idCell);
+            row.appendChild(nomeCell);
+            categoriaTable.appendChild(row);
+          });
+        })
+        .catch(error => console.error('Erro ao buscar categorias:', error));
+
+      fetch(`${apiUrl}/generos`)
+        .then(response => response.json())
+        .then(generos => {
+          const generoSelect = document.getElementById('genero');
+          const generoTable = document.getElementById('generos-table-body');
+          generos.forEach(genero => {
+
+            const option = document.createElement('option');
+            option.value = genero.id;
+            option.textContent = genero.nome;
+            generoSelect.appendChild(option);
+
+
+            const row = document.createElement('tr');
+            const idCell = document.createElement('td');
+            const nomeCell = document.createElement('td');
+            idCell.textContent = genero.id;
+            nomeCell.textContent = genero.nome;
+            row.appendChild(idCell);
+            row.appendChild(nomeCell);
+            generoTable.appendChild(row);
+          });
+        })
+        .catch(error => console.error('Erro ao buscar generos:', error));
+
+
+      document.getElementById('create-genero-form').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const nome = document.getElementById('novo-genero').value;
+        fetchOptions.body = JSON.stringify({ nome });
+        fetch(`${apiUrl}/generos`, fetchOptions)
+          .then(response => response.json())
+          .then(data => {
+            alert('Gênero criado com sucesso!');
+            location.reload();
+          })
+          .catch(error => console.error('Erro ao criar genero:', error));
+      });
+
+      document.getElementById('create-categoria-form').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const nome = document.getElementById('novo-categoria').value;
+        fetchOptions.body = JSON.stringify({ nome });
+        fetch(`${apiUrl}/categorias`, fetchOptions)
+          .then(response => response.json())
+          .then(data => {
+            alert('Categoria criada com sucesso!');
+            location.reload();
+          })
+          .catch(error => console.error('Erro ao criar categoria:', error));
+      });
+
+      document.getElementById('create-obra-form').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const nome = document.getElementById('nome').value;
+        const descricao = document.getElementById('descricao').value;
+        const categoriaId = document.getElementById('categoria').value;
+        const generoId = document.getElementById('genero').value;
+        fetchOptions.body = JSON.stringify({ nome, descricao, categoriaId, generoId });
+        fetch(`${apiUrl}/obras`, fetchOptions)
+          .then(response => response.json())
+          .then(data => {
+            alert('Obra criada com sucesso!');
+            location.reload();
+          })
+          .catch(error => console.error('Erro ao criar obra:', error));
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <h1>Media App</h1>
+
+
+  <h2>Criar Gênero</h2>
+  <form id="create-genero-form" method="POST">
+    <label for="novo-genero">Nome do Gênero:</label>
+    <input type="text" id="novo-genero" name="nome" required>
+    <button type="submit">Criar Gênero</button>
+  </form>
+
+
+  <h2>Criar Categoria</h2>
+  <form id="create-categoria-form" method="POST">
+    <label for="novo-categoria">Nome da Categoria:</label>
+    <input type="text" id="novo-categoria" name="nome" required>
+    <button type="submit">Criar Categoria</button>
+  </form>
+
+
+  <h2>Criar Obra</h2>
+  <form id="create-obra-form" method="POST">
+    <label for="nome">Nome:</label>
+    <input type="text" id="nome" name="nome" required>
+    <br>
+    <label for="descricao">Descrição:</label>
+    <input type="text" id="descricao" name="descricao" required>
+    <br>
+    <label for="categoria">Categoria:</label>
+    <input type="text" id="categoria" name="categoria" required>
+    <br>
+    <label for="genero">Gênero:</label>
+    <input type="text" id="genero" name="genero" required>
+    <br>
+    <button type="submit">Adicionar Obra</button>
+  </form>
+</body>
+
+</html>

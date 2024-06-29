@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro</title>
+</head>
+<body>
+  <h1>Cadastro</h1>
+  <form action="localhost:3000/api/usuario/cadastro" method="POST">
+    <label for="nome">Nome:</label>
+    <input type="text" id="nome" name="nome" required>
+    <br>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+    <br>
+    <label for="senha">Senha:</label>
+    <input type="password" id="senha" name="senha" required>
+    <br>
+    <button type="submit">Cadastrar</button>
+  </form>
+  <br>
+  <a href="/login">Já tem uma conta? Faça login</a>
+  <br>
+  <a href="/">Voltar</a>
+</body>
+</html>
